@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b10">
+<meta name="description" content="FocusMoments — photography and graphic design studio portfolio.">
+<title>FocusMoments — Photography & Graphic Design</title>
+
+<!-- Google Fonts: Playfair Display for headings, DM Sans for body copy -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+
+/* =====================================================
+   1. RESET + ROOT VARIABLES
+   Centralised color/spacing tokens so every animated
+   element (nav, cards, buttons) shares one palette.
+===================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root{
+  --bg: #080b10;
+  --surface: #0d1118;
+  --surface-hover: #121923;
+  --border: #1b2532;
+
+  --white: #ffffff;
+  --gray: #929baa;
+  --gray-dim: #5d6269;
+
+  --blue: #178cff;
+  --blue-dim: rgba(23, 140, 255, .12);
+  --blue-glow: rgba(23, 140, 255, .35);
+
+  --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --sans: "DM Sans", Arial, Helvetica, sans-serif;
+
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+html{ scroll-behavior: smooth; }
+
+body{
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--sans);
+  line-height: 1.65;
+  overflow-x: hidden; /* prevents slide-in animations from creating horizontal scroll */
+}
+
+a{ text-decoration: none; color: inherit; }
+img{ display: block; max-width: 100%; }
+button{ font-family: inherit; }
+
+::selection{ background: var(--blue); color: #fff; }
+
+/* Respect users who've asked the OS for reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================
+   2. NAVIGATION BAR
+   - Fades/drops in on page load (fmNavIn)
+   - Logo + links stagger in with delays
+   - Shrinks + gains a background once the page scrolls
+     (handled by the .scrolled class toggled in JS)
+   - Animated underline sweeps under each link on hover
+===================================================== */
+.navbar{
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7%;
+
+  background: rgba(8, 11, 16, .78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(27, 37, 50, .8);
+
+  z-index: 999;
+
+  animation: navDropIn .9s var(--ease) forwards;
+  transition: height .4s ease, background .4s ease, box-shadow .4s ease, border-color .4s ease;
+}
+
+.navbar.scrolled{
+  height: 66px;
+  background: rgba(6, 9, 13, .94);
+  border-bottom-color: rgba(23, 140, 255, .18);
+  box-shadow: 0 15px 40px rgba(0,0,0,.35);
+}
+
+@keyframes navDropIn{
+  from{ opacity: 0; transform: translateY(-100%); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 2px;
+
+  opacity: 0;
+  transform: translateX(-24px);
+  animation: navItemIn .8s .15s var(--ease) forwards;
+}
+
+.logo-icon{
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--none);
+  border-radius: 30px;
+  color: var(--blue);
+  font-size: 15px;
+  font-family: var(--serif);
+
+  box-shadow: 0 0 0 rgba(23,140,255,0);
+  transition: box-shadow .4s ease, transform .4s ease;
+}
+
+.logo:hover .logo-icon{
+  box-shadow: 0 0 20px var(--blue-glow);
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.nav-links{
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+.nav-links a{
+  position: relative;
+  color: var(--gray);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 0;
+
+  opacity: 0;
+  transform: translateY(-12px);
+  animation: navItemIn .7s var(--ease) forwards;
+  transition: color .3s ease;
+}
+/* Staggered stagger delays so each link drops in slightly after the last */
+.nav-links a:nth-child(1){ animation-delay: .30s; }
+.nav-links a:nth-child(2){ animation-delay: .38s; }
+.nav-links a:nth-child(3){ animation-delay: .46s; }
+.nav-links a:nth-child(4){ animation-delay: .54s; }
+
+@keyframes navItemIn{
+  from{ opacity: 0; transform: translateY(-12px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+.nav-links a::after{
+  content: "";
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 100%; height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .4s var(--ease);
+}
+.nav-links a:hover{ color: var(--white); }
+.nav-links a:hover::after,
+.nav-links a.active::after{ transform: scaleX(1); }
+.nav-links a.active{ color: var(--white); }
+
+.nav-links .nav-button{
+  padding: 9px 20px !important;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue) !important;
+  transition: background .3s ease, color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+.nav-links .nav-button::after{ display: none; }
+.nav-links .nav-button:hover{
+  background: var(--blue);
+  color: #fff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px var(--blue-glow);
+}
+
+/* Hamburger button — three lines that morph into an X */
+.menu-toggle{
+  display: none;
+  width: 42px; height: 42px;
+  background: transparent;
+  border: 1px solid rgba(23,140,255,.3);
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+.menu-toggle span{
+  position: absolute;
+  left: 10px;
+  width: 20px; height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform .35s ease, opacity .25s ease, top .35s ease;
+}
+.menu-toggle span:nth-child(1){ top: 14px; }
+.menu-toggle span:nth-child(2){ top: 20px; }
+.menu-toggle span:nth-child(3){ top: 26px; }
+.menu-toggle.open span:nth-child(1){ top: 20px; transform: rotate(45deg); }
+.menu-toggle.open span:nth-child(2){ opacity: 0; }
+.menu-toggle.open span:nth-child(3){ top: 20px; transform: rotate(-45deg); }
+
+@media (max-width: 760px){
+  .navbar{ padding: 0 5%; }
+  .menu-toggle{ display: block; }
+
+  .nav-links{
+    position: absolute;
+    top: 100%; left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0 7%;
+
+    background: rgba(6,9,13,.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(23,140,255,.15);
+
+    /* Collapsed via clip-path so the reveal itself is an animation, not just display:none */
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: clip-path .55s var(--ease), opacity .3s ease;
+  }
+  .nav-links.active{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-links a{
+    width: 100%;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    animation: none; /* replaced by mobileLinkIn once menu opens */
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  .nav-links.active a{ animation: mobileLinkIn .5s var(--ease) forwards; }
+  .nav-links.active a:nth-child(1){ animation-delay: .05s; }
+  .nav-links.active a:nth-child(2){ animation-delay: .12s; }
+  .nav-links.active a:nth-child(3){ animation-delay: .19s; }
+  .nav-links.active a:nth-child(4){ animation-delay: .26s; }
+  .nav-links .nav-button{ margin: 16px 0 22px; width: fit-content; }
+}
+@keyframes mobileLinkIn{
+  from{ opacity: 0; transform: translateX(-20px); }
+  to{ opacity: 1; transform: translateX(0); }
+}
+
+/* =====================================================
+   3. SHARED LAYOUT HELPERS
+===================================================== */
+.shell{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 7%;
+}
+
+.section{
+  padding: 130px 0 40px;
+}
+.section + .section{ padding-top: 100px; }
+
+.kicker{
+  display: inline-block;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title{
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.1;
+  margin-bottom: 18px;
+}
+
+.section-intro{
+  max-width: 560px;
+  color: var(--gray);
+  font-size: 15px;
+}
+
+/* =====================================================
+   4. SCROLL-REVEAL ANIMATION SYSTEM
+   Every element with class="reveal" starts hidden/offset.
+   An IntersectionObserver in the JS below adds ".visible"
+   the first time the element enters the viewport, which
+   triggers this transition. Elements never re-hide, so the
+   effect plays once per element as the user scrolls down.
+===================================================== */
+.reveal{
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal.visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Variant that slides in from the left, used for alternating card layouts */
+.reveal-left{
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal-left.visible{ opacity: 1; transform: translateX(0); }
+
+.reveal-right{
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease);
+}
+.reveal-right.visible{ opacity: 1; transform: translateX(0); }
+
+/* Stagger children of a grid: each card's transition-delay
+   is set inline via a CSS custom property in the markup below,
+   so cards cascade in one after another instead of all at once. */
+.stagger > *{ transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* =====================================================
+   5. HERO
+===================================================== */
+.hero{
+  padding: 190px 7% 100px;
+  text-align: center;
+
+  background: radial-gradient(circle at center, var(--blue-dim), transparent 55%);
+}
+
+.hero h1{
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(42px, 8vw, 84px);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 22px;
+}
+.hero h1 em{
+  font-style: italic;
+  color: var(--blue);
+}
+
+.hero p{
+  max-width: 560px;
+  margin: 0 auto 28px;
+  color: var(--gray);
+  font-size: 16px;
+}
+
+.hero-meta{
+  color: var(--gray-dim);
+  font-size: 13px;
+  letter-spacing: .5px;
+}
+.hero-meta strong{ color: var(--gray); font-weight: 600; }
+
+/* Gentle floating scroll-cue below the hero copy */
+.scroll-cue{
+  margin-top: 46px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-dim);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.scroll-cue span{
+  width: 1px; height: 30px;
+  background: linear-gradient(var(--blue), transparent);
+  animation: scrollPulse 1.8s ease-in-out infinite;
+}
+@keyframes scrollPulse{
+  0%, 100%{ opacity: .2; transform: scaleY(.6); }
+  50%{ opacity: 1; transform: scaleY(1); }
+}
+
+/* =====================================================
+   6. ABOUT SECTION
+===================================================== */
+.about-grid{
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 50px;
+}
+
+.about-portrait{
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, var(--surface), var(--surface-hover)),
+    radial-gradient(circle at 30% 20%, var(--blue-dim), transparent 60%);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+/* Subtle animated sheen that sweeps across the portrait placeholder on hover */
+.about-portrait::after{
+  content: "";
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 40%; height: 200%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.06), transparent);
+  transform: rotate(20deg);
+  transition: left .8s ease;
+}
+.about-portrait:hover::after{ left: 140%; }
+
+.about-copy p{
+  color: var(--gray);
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.about-copy p.lead{
+  color: var(--white);
+  font-size: 19px;
+  font-family: var(--serif);
+  line-height: 1.5;
+}
+
+.facts{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 34px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.fact-label{
+  color: var(--gray-dim);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.fact-value{ font-size: 14px; font-weight: 600; }
+
+/* Service cards under About — the "animated cards" for this section */
+.services{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 70px;
+}
+
+.service-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 30px 26px;
+  transition: transform .4s var(--ease), border-color .4s ease, box-shadow .4s ease;
+}
+.service-card:hover{
+  transform: translateY(-6px);
+  border-color: rgba(23,140,255,.4);
+  box-shadow: 0 20px 40px rgba(0,0,0,.35);
+}
+.service-num{
+  color: var(--blue);
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+.service-card h3{
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+.service-card p{ color: var(--gray); font-size: 14px; }
+
+@media (max-width: 820px){
+  .about-grid{ grid-template-columns: 1fr; gap: 34px; }
+  .facts{ grid-template-columns: 1fr 1fr; }
+  .services{ grid-template-columns: 1fr; }
+}
+
+/* =====================================================
+   7. PROJECTS SECTION
+   Cards fade/slide up on scroll, staggered via .stagger,
+   and lift + reveal an overlay caption on hover.
+===================================================== */
+.filters{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 40px 0 44px;
+}
+.filter-btn{
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  padding: 9px 18px;
+  border-radius: 30px;
+  font-size: 12px;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: border-color .3s ease, color .3s ease, box-shadow .3s ease;
+}
+.filter-btn:hover,
+.filter-btn.active{
+  border-color: var(--blue);
+  color: var(--white);
+  box-shadow: 0 0 16px rgba(23,140,255,.18);
+}
+
+.project-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.project-card{
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  min-height: 300px;
+  aspect-ratio: 4 / 5;
+  cursor: pointer;
+
+  transition: transform .5s var(--ease), border-color .4s ease, box-shadow .4s ease, opacity .4s ease, max-height .4s ease, margin .4s ease, padding .4s ease;
+}
+.project-card:hover{
+  transform: translateY(-6px);
+  border-color: rgba(23,140,255,.45);
+  box-shadow: 0 20px 45px rgba(0,0,0,.4);
+}
+/* Hidden state used by the category filter buttons */
+.project-card.hide{
+  opacity: 0;
+  transform: scale(.92);
+  pointer-events: none;
+  position: absolute;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.project-card .thumb{
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(150deg, var(--surface-hover), var(--surface)),
+    radial-gradient(circle at 70% 20%, var(--blue-dim), transparent 60%);
+  transition: transform .7s ease;
+}
+.project-card:hover .thumb{ transform: scale(1.06); }
+
+.project-card::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(5,7,10,.92) 0%, rgba(5,7,10,.35) 45%, transparent 75%);
+}
+
+.project-info{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 24px;
+  z-index: 2;
+}
+.project-category{
+  color: var(--blue);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.project-title{
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.project-desc{
+  color: var(--gray);
+  font-size: 13px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height .4s ease, opacity .3s ease;
+}
+.project-card:hover .project-desc{
+  max-height: 60px;
+  opacity: 1;
+}
+
+@media (max-width: 900px){
+  .project-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px){
+  .project-grid{ grid-template-columns: 1fr; }
+}
+
+/* =====================================================
+   8. CONTACT SECTION
+===================================================== */
+.contact-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 40px;
+}
+
+.contact-details{
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 32px;
+}
+.contact-details div{ display: flex; flex-direction: column; gap: 3px; }
+.contact-details span{
+  color: var(--gray-dim);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.contact-details a{
+  font-size: 15px;
+  transition: color .3s ease;
+}
+.contact-details a:hover{ color: var(--blue); }
+
+.form-group{ margin-bottom: 18px; }
+.form-group label{
+  display: block;
+  margin-bottom: 7px;
+  color: #c9ccd0;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--surface);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  transition: border-color .3s ease, box-shadow .3s ease;
+}
+.form-group textarea{ min-height: 130px; resize: vertical; }
+.form-group input::placeholder,
+.form-group textarea::placeholder{ color: var(--gray-dim); }
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(23,140,255,.1);
+}
+.form-group select{ appearance: none; cursor: pointer; }
+
+.submit-button{
+  display: inline-block;
+  padding: 14px 32px;
+  border: 1px solid var(--blue);
+  border-radius: 50px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+.submit-button:hover{
+  background: transparent;
+  color: var(--blue);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--blue-glow);
+}
+
+@media (max-width: 820px){
+  .contact-grid{ grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* =====================================================
+   9. FOOTER
+   Fades + rises into place shortly after the page loads
+   (separate from the scroll-reveal system, since it's
+   below the fold and needs its own load-triggered timing
+   handled via the .footer-in class added in JS on DOMContentLoaded).
+===================================================== */
+footer{
+  border-top: 1px solid var(--border);
+  padding: 34px 7%;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  color: var(--gray-dim);
+  font-size: 12px;
+  letter-spacing: .3px;
+
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+footer.footer-in{ opacity: 1; transform: translateY(0); }
+
+footer .footer-links{ display: flex; gap: 20px; }
+footer .footer-links a{ transition: color .3s ease; }
+footer .footer-links a:hover{ color: var(--blue); }
+
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+<header class="navbar" id="navbar">
+  <a href="#top" class="logo" aria-label="FocusMoments home">
+    <span class="logo-icon">
+      <img src="images\logo.webp">
+    </span>
+    FOCUSMOMENTS
+  </a>
+
+  <nav class="nav-links" id="navLinks">
+    <a href="#top" class="active">Home</a>
+    <a href="#about">About</a>
+    <a href="C:\Users\asant\Desktop\mike\New folder\focus\GALLERY.html">Projects</a>
+    <a href="#contact" class="nav-button">Contact</a>
+  </nav>
+
+  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- =====================================================
+       HERO
+  ===================================================== -->
+  <section class="hero">
+    <div class="kicker">Photography / Design / Branding</div>
+    <h1>Stories worth<br><em>focusing</em> on.</h1>
+    <p>
+      FocusMoments is an independent creative studio aims in building visual
+      identity through photography and graphic designing 
+    </p>
+    <div class="hero-meta">Based in <strong>Ghana, West Africa</strong></div>
+
+    <div class="scroll-cue"></div>
+  </section>
+
+  <!-- =====================================================
+       ABOUT ME
+  ===================================================== -->
+      <section class="section" id="about">
+    <div class="shell">
+      <div class="kicker reveal">The Mastermind behind</div>
+      <h2 class="section-title reveal">FocusMoment Studios.</h2>
+
+      <div class="about-grid">
+        <div class="about-portrait reveal-left" role="img" aria-label="Studio portrait">
+          <img src="c:\Users\asant\Desktop\mike\images\3 (36).jpeg">
+        </div>
+
+        <div class="about-copy reveal-right">
+          <p class="lead">
+            FocusMoments is a photography and graphic design studio for
+            people who care about how their story looks and feels.
+          </p>
+          <p>
+            We work across portraiture, visual storytelling, campaigns
+            and identity systems — moving between the camera and the
+            canvas to build work that feels personal rather than
+            manufactured.
+          </p>
+          <p>
+            Every commission begins with observation. The goal is not
+            to decorate a message, but to find its visual character
+            and make it unmistakable.
+          </p>
+
+          <div class="facts">
+            <div class="fact">
+              <div class="fact-label">Practice</div>
+              <div class="fact-value">Photo&nbsp;Design</div>
+            </div>
+            <div class="fact">
+              <div class="fact-label">Working</div>
+              <div class="fact-value">Remote and 
+                on location services</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service cards: staggered fade/slide-in via .stagger + --i -->
+      <div class="services stagger">
+        <article class="service-card reveal" style="--i:0">
+          <div class="service-num">01 — Imagery</div>
+          <h3>Photography</h3>
+          <p>Portraits, editorials, events and visual stories shaped around natural moments and strong composition.</p>
+        </article>
+        <article class="service-card reveal" style="--i:1">
+          <div class="service-num">02 — Identity</div>
+          <h3>Graphic Design</h3>
+          <p>Logos, campaigns, social systems and brand visuals designed to make an identity feel coherent and alive.</p>
+        </article>
+        <article class="service-card reveal" style="--i:2">
+          <div class="service-num">03 — Direction</div>
+          <h3>Branding</h3>
+          <p>Concept development and visual direction for projects that need a clear point of view from the first frame.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       CONTACT
+  ===================================================== -->
+  <section class="section" id="contact">
+    <div class="shell">
+      <div class="contact-grid">
+        <div class="reveal-left">
+          <div class="kicker">Start Something</div>
+          <h2 class="section-title">Let's make something<br><em>worth</em> remembering.</h2>
+          <p class="section-intro">
+            Have a project, campaign, portrait session or visual
+            identity in mind? Send the rough idea — the details can
+            come after.
+          </p>
+
+          <div class="contact-details">
+            <div>
+              <span></span>
+              <a href=""></a>
+            </div>
+            <div>
+              <span></span>
+              <a href="" target="_blank" rel="noopener"></a>
+            </div>
+            <div>
+              <span></span>
+              <a href="" target="_blank" rel="noopener"></a>
+            </div>
+          </div>
+        </div>
+
+        <form class="reveal-right" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="d1ff6b90-c7a8-4cc7-b20f-bca3e79c4fe8">
+
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="service">Service</label>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>Select a service</option>
+              <option value="photography">Photography</option>
+              <option value="graphic-design">Graphic Design</option>
+              <option value="branding">Branding</option>
+              <option value="creative-direction">Creative Direction</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-button">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =====================================================
+     FOOTER
+     Its fade-up is triggered on DOMContentLoaded in the JS
+     below, not on scroll — so it plays once, shortly after load.
+===================================================== -->
+<footer id="siteFooter">
+  <span>© Focus Studio</span>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/focusmoments_gh/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@focusmoments_gh/" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://www.linkedin.com/in/focus-studios-424591431/">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+/* =====================================================
+   NAVIGATION: scroll shrink + mobile menu toggle
+===================================================== */
+const navbar = document.getElementById("navbar");
+
+// Adds/removes .scrolled once the user passes 30px, which
+// triggers the CSS transition that shrinks the bar and
+// darkens its background (see .navbar.scrolled above).
+window.addEventListener("scroll", () => {
+  navbar.classList.toggle("scrolled", window.scrollY > 30);
+}, { passive: true });
+
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+
+menuToggle.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("active");
+  menuToggle.classList.toggle("open", open);
+  menuToggle.setAttribute("aria-expanded", String(open));
+});
+
+// Close the mobile menu after a link is tapped
+navLinks.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("active");
+    menuToggle.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  });
+});
+
+// Close the mobile menu if the user taps outside of it
+document.addEventListener("click", (e) => {
+  if (!navbar.contains(e.target) && navLinks.classList.contains("active")) {
+    navLinks.classList.remove("active");
+    menuToggle.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+});
+
+/* =====================================================
+   ACTIVE-LINK HIGHLIGHT
+   Watches which section is currently in view and marks
+   the matching nav link with .active, so the underline
+   animation follows scroll position automatically.
+===================================================== */
+const sections = document.querySelectorAll("main section[id]");
+const navAnchors = document.querySelectorAll(".nav-links a");
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navAnchors.forEach(a => a.classList.remove("active"));
+      const match = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (match) match.classList.add("active");
+    }
+  });
+}, { rootMargin: "-40% 0px -50% 0px" });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+/* =====================================================
+   SCROLL-REVEAL
+   One shared observer drives every fade/slide-in element
+   across the whole page (.reveal, .reveal-left, .reveal-right).
+   Each element is unobserved after it animates once, so the
+   effect never re-triggers while scrolling back up.
+===================================================== */
+const revealTargets = document.querySelectorAll(".reveal, .reveal-left, .reveal-right");
+
+const revealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+revealTargets.forEach(el => revealObserver.observe(el));
+
+/* =====================================================
+   PROJECT FILTER
+   Toggles the .hide class on project cards whose
+   data-category doesn't match the clicked filter button.
+   .hide animates out via the transition already defined
+   on .project-card in CSS (opacity + scale + collapse).
+===================================================== */
+const filterButtons = document.querySelectorAll(".filter-btn");
+const projectCards = document.querySelectorAll(".project-card");
+
+filterButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    filterButtons.forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    const category = button.dataset.filter;
+
+    projectCards.forEach(card => {
+      const matches = category === "all" || card.dataset.category === category;
+      card.classList.toggle("hide", !matches);
+    });
+  });
+});
+
+/* =====================================================
+   CONTACT FORM: lightweight submit feedback
+   Prevents the default navigation just long enough to show
+   a confirmation state on the button, then lets the form
+   submit through to Web3Forms as normal.
+===================================================== */
+const contactForm = document.getElementById("contactForm");
+if (contactForm) {
+  contactForm.addEventListener("submit", function () {
+    const button = this.querySelector(".submit-button");
+    if (button) {
+      button.textContent = "Sending...";
+      button.style.pointerEvents = "none";
+    }
+    // Form submits normally to Web3Forms; no preventDefault here.
+  });
+}
+
+/* =====================================================
+   FOOTER + FOOTER YEAR
+   Footer gets its .footer-in class shortly after the page
+   loads (not on scroll), producing a gentle one-time fade/
+   rise the first time the page is opened.
+===================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
+
+  const footer = document.getElementById("siteFooter");
+  if (footer) {
+    setTimeout(() => footer.classList.add("footer-in"), 400);
+  }
+});
+</script>
+
+</body>
+</html>
